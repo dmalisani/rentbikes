@@ -9,6 +9,7 @@ RATE_RENT = {
 }
 FAMILY_DISCOUNT_PERCENTAJE = 30
 
+
 def _normalize_datetime(dt):
     if isinstance(dt, str):
         try:
@@ -21,6 +22,7 @@ def _normalize_datetime(dt):
     else:
         raise ValueError('Invalid given datetime')
 
+
 def _split_datetime(difference):
     weeks = int(difference.days / 7)
     days = difference.days - (weeks * 7)
@@ -30,10 +32,11 @@ def _split_datetime(difference):
 
 class Rent():
     rented_periods = []
+
     def __init__(self, customer_name, passport=None):
         self.customer = customer_name
         self.passport = passport
-    
+
     def add_rented_period(self, bikes, start_datetime, end_datetime):
         budget = getquote(bikes, start_datetime, end_datetime)
         if not isinstance(budget, float) and not isinstance(budget, int):
@@ -56,7 +59,7 @@ def getquote(bikes, start_datetime, end_datetime):
         assert start < end
     except Exception:
         return "Parameters error"
-    
+
     difference = end - start
     try:
         assert difference >= timedelta(hours=1)
@@ -66,8 +69,8 @@ def getquote(bikes, start_datetime, end_datetime):
 
     weeks, days, hours = _split_datetime(difference)
     budget = (
-        weeks * RATE_RENT["week"] + \
-        days * RATE_RENT["day"] + \
+        weeks * RATE_RENT["week"] +
+        days * RATE_RENT["day"] +
         hours * RATE_RENT["hour"])
     if bikes >= 3:
         budget -= budget * FAMILY_DISCOUNT_PERCENTAJE / 100
